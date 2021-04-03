@@ -306,7 +306,33 @@
    (let [redseq [val]]
      (map #(last (conj redseq (f (last redseq) %1))) coll))))
 
-(defn sequence-reductions
+(defn sequence-reductions3
   "Behaves like reduce, but returns each intermediate value of the reduction"
   ([f val coll]
    (lazy-seq (iterate (fn [redseq] (conj redseq (f (last redseq) (first coll)))) val))))
+
+(defn sequence-reductions4
+  "Behaves like reduce, but returns each intermediate value of the reduction"
+  ([f val coll]
+   (reduce (fn [redseq val]
+             (conj redseq (f (last redseq) val)))
+           [val]
+           coll))
+  ([f coll]
+   (reduce (fn [redseq val]
+             (conj redseq (f (last redseq) val)))
+           [(f (first coll) (second coll))]
+           (drop 2 coll))))
+
+(defn sequence-reductions
+  "Behaves like reduce, but returns each intermediate value of the reduction"
+  ([f val coll]
+   (if (list? val)
+     (list @val)
+     (cons val
+           (lazy-seq
+            (when-let [s (seq coll)]
+              (sequence-reductions f (f val (first s)) (rest s)))))))
+  ([f coll]
+   (when-let [s (seq coll)]
+     (sequence-reductions f (first s) (rest s)))))
