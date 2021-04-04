@@ -336,3 +336,8 @@
   ([f coll]
    (when-let [s (seq coll)]
      (sequence-reductions f (first s) (rest s)))))
+
+(defn map-construction
+  "takes a vector of keys and a vector of values and constructs a map from them"
+  [keys vals]
+  (into (hash-map) (map (fn [k v] [k v]) keys vals)))

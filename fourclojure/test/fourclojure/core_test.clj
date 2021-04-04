@@ -210,3 +210,9 @@
     (is (= (take 5 (core/sequence-reductions + (range))) [0 1 3 6 10]))
     (is (= (core/sequence-reductions conj [1] [2 3 4]) [[1] [1 2] [1 2 3] [1 2 3 4]]))
     (is (= (last (core/sequence-reductions * 2 [3 4 5])) (reduce * 2 [3 4 5]) 120))))
+
+(deftest map-construction-test
+  (testing "core/map-construction"
+    (is (= (core/map-construction [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3}))
+    (is (= (core/map-construction [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"}))
+    (is (= (core/map-construction [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"}))))
