@@ -216,3 +216,17 @@
     (is (= (core/map-construction [:a :b :c] [1 2 3]) {:a 1, :b 2, :c 3}))
     (is (= (core/map-construction [1 2 3 4] ["one" "two" "three"]) {1 "one", 2 "two", 3 "three"}))
     (is (= (core/map-construction [:foo :bar] ["foo" "bar" "baz"]) {:foo "foo", :bar "bar"}))))
+
+(deftest my-iterate-test
+  (testing "core/my-iterate"
+    (is (= (take 5 (core/my-iterate #(* 2 %) 1)) [1 2 4 8 16]))
+    (is (= (take 100 (core/my-iterate inc 0)) (take 100 (range))))
+    (is (= (take 9 (core/my-iterate #(inc (mod % 3)) 1)) (take 9 (cycle [1 2 3]))))))
+
+(deftest group-a-sequence-test
+  (testing "core/group-a-sequence"
+    (is (= (core/group-a-sequence #(> % 5) [1 3 6 8]) {false [1 3], true [6 8]}))
+    (is (= (core/group-a-sequence #(apply / %) [[1 2] [2 4] [4 6] [3 6]])
+           {1/2 [[1 2] [2 4] [3 6]], 2/3 [[4 6]]}))
+    (is (= (core/group-a-sequence count [[1] [1 2] [3] [1 2 3] [2 3]])
+           {1 [[1] [3]], 2 [[1 2] [2 3]], 3 [[1 2 3]]}))))

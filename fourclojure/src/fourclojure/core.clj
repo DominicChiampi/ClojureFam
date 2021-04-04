@@ -341,3 +341,46 @@
   "takes a vector of keys and a vector of values and constructs a map from them"
   [keys vals]
   (into (hash-map) (map (fn [k v] [k v]) keys vals)))
+
+(defn my-iterate
+  "takes a function and a value and returns an infinite sequence of (f x) (f (f x)) etc"
+  [f x]
+  (cons x
+        (lazy-seq
+         (my-iterate f (f x)))))
+
+(defn group-a-sequence1
+  "Returns a map. Keys are (apply f s). Values are corresponding items in the order they appear in s"
+  [f s]
+  (apply merge-with #(if (coll? (first %1))
+                       (conj %1 %2)
+                       [%1 %2])
+         (map #(hash-map (f %) %) s)))
+
+(defn group-a-sequence2
+  "Returns a map. Keys are (apply f s). Values are corresponding items in the order they appear in s"
+  [f s]
+  ((fn build-map
+     [map kvs]
+     (when-let [s (seq kvs)]
+       (let [k (get (first s) 0) v (get (first s) 1)]
+         (build-map (if (get map k)
+                      (assoc map k (conj (get map k) v))
+                      (assoc map k [v]))
+                    (rest s)))))
+   {}
+   (map #(vector (f %) %) s)))
+
+(defn group-a-sequence
+  "Returns a map. Keys are (apply f s). Values are corresponding items in the order they appear in s"
+  [f s]
+  ((fn build-map
+     [map kvs]
+     (if-let [s (seq kvs)]
+       (build-map (if (get map (get (first s) 0))
+                    (assoc map (get (first s) 0) (conj (get map (get (first s) 0)) (get (first s) 1)))
+                    (assoc map (get (first s) 0) [(get (first s) 1)]))
+                  (rest s))
+       map))
+   {}
+   (map #(vector (f %) %) s)))
