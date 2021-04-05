@@ -384,3 +384,9 @@
        map))
    {}
    (map #(vector (f %) %) s)))
+
+(defn gcd
+  "Given two integers, returns the greatest common divisor"
+  [x y]
+  (letfn [(divisors [n] (filter #(zero? (rem n %)) (range 1 (inc n))))]
+    (apply max (filter (set (divisors y)) (divisors x)))))

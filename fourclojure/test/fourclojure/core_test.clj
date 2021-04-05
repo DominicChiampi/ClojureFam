@@ -230,3 +230,18 @@
            {1/2 [[1 2] [2 4] [3 6]], 2/3 [[4 6]]}))
     (is (= (core/group-a-sequence count [[1] [1 2] [3] [1 2 3] [2 3]])
            {1 [[1] [3]], 2 [[1 2] [2 3]], 3 [[1 2 3]]}))))
+
+;; (deftest black-box-testing-test
+;;   (testing "core/black-box-testing"
+;;     (is (= :map (core/black-box-testing {:a 1, :b 2})))
+;;     (is (= :list (core/black-box-testing (range (rand-int 20)))))
+;;     (is (= :vector (core/black-box-testing [1 2 3 4 5 6])))
+;;     (is (= :set (core/black-box-testing #{10 (rand-int 5)})))
+;;     (is (= [:map :set :vector :list] (map core/black-box-testing [{} #{} [] ()])))))
+
+(deftest gcd-test
+  (testing "core/gcd"
+    (is (= (core/gcd 2 4) 2))
+    (is (= (core/gcd 10 5) 5))
+    (is (= (core/gcd 5 7) 1))
+    (is (= (core/gcd 1023 858) 33))))
