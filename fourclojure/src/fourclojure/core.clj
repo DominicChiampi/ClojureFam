@@ -1,5 +1,6 @@
 (ns fourclojure.core
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:require [clojure.set :as cset]))
 
 (defn last-element
   "Return the last element in a sequence without using last."
@@ -427,3 +428,63 @@
                       (apply = %))
                 (mapcat #(% board) [cols rows udiag ddiag]))]
       (when wins (first (first wins))))))
+
+(defn filter-perfect-squares
+  "Returns a new comma separated string that only contains the numbers which are perfect squares"
+  [si]
+  (letfn [(squares [] (map #(str (* % %)) (range)))]
+    (str/join "," (sort (clojure.set/intersection
+                         (set (take 10 (squares)))
+                         (set (str/split si #"\,")))))))
+
+(defn eulers-totient
+  "Returns the number of positive integers less than x which are coprime to x"
+  [n]
+  (letfn [(coprime? [a b] (= 1 ((fn [x y] (if (zero? y)
+                                            x
+                                            (recur y (rem x y)))) a b)))]
+    (->>
+     (range n)
+     (filter #(coprime? % n))
+     (count))))
+
+(defn anagram-finder
+  "Finds all anagrams in a vector of words"
+  [words]
+  (reduce #(if (>= (count (second %2)) 2)
+             (conj %1 (set (second %2)))
+             %1)
+          #{}
+          (group-by frequencies words)))
+
+;; (defn triangle-minimal-path
+;;   "Calculates the sum of the minimal path through a triangle"
+;;   [tri]
+;;   (letfn [(newval
+;;             [tri val r i]
+;;             (+ val (nth (nth tri r) i)))
+;;           (build-paths
+;;             [tri val r i]
+;;             (if (>= (inc r) (count tri))
+;;               [(newval tri val r i)]
+;;               (conj (build-paths tri (newval tri val r i) (inc r) i) (build-paths tri (newval tri val r i) (inc r) (inc i)))))]
+;;     (min (build-paths tri 0 0 0))))
+
+(defn perfect-numbers
+  "Returns true if the sum of n's divisors equal n"
+  [n]
+  (= n (reduce + (filter #(zero? (rem n %)) (range 1 n)))))
+
+(defn set-intersection
+  "Returns the intersection of two sets"
+  [s1 s2]
+  (set (filter #(get s2 %) s1)))
+
+(defn half-truth
+  "returns true if some, but not all, parameters are true"
+  [& args]
+  (if (apply = args)
+    false
+    (if (some true? args)
+      true
+      false)))

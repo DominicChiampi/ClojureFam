@@ -293,3 +293,58 @@
     (is (= nil (core/analyze-ttt [[:x :o :x]
                                   [:x :o :x]
                                   [:o :x :o]])))))
+
+(deftest filter-perfect-squares-test
+  (testing "core/filter-perfect-squares"
+    (is (= (core/filter-perfect-squares "4,5,6,7,8,9") "4,9"))
+    (is (= (core/filter-perfect-squares "15,16,25,36,37") "16,25,36"))))
+
+(deftest eulers-totient-test
+  (testing "core/eulers-totient"
+    (is (= (core/eulers-totient 1) 1))
+    (is (= (core/eulers-totient 10) (count '(1 3 7 9)) 4))
+    (is (= (core/eulers-totient 40) 16))
+    (is (= (core/eulers-totient 99) 60))))
+
+(deftest anagram-finder-test
+  (testing "core/anagram-finder"
+    (is (= (core/anagram-finder ["meat" "mat" "team" "mate" "eat"])
+           #{#{"meat" "team" "mate"}}))
+    (is (= (core/anagram-finder ["veer" "lake" "item" "kale" "mite" "ever"])
+           #{#{"veer" "ever"} #{"lake" "kale"} #{"mite" "item"}}))))
+
+;; (deftest triangle-minimal-path-test
+;;   (testing "core/triangle-minimal-path"
+;;     (is (= 7 (core/triangle-minimal-path '([1]
+;;                                            [2 4]
+;;                                            [5 1 4]
+;;                                            [2 3 4 5]))))
+;;     (is (= 20 (core/triangle-minimal-path '([3]
+;;                                             [2 4]
+;;                                             [1 9 3]
+;;                                             [9 9 2 4]
+;;                                             [4 6 6 7 8]
+;;                                             [5 7 3 5 1 4]))))))
+
+(deftest perfect-numbers-test
+  (testing "core/perfect-numbers"
+    (is (= (core/perfect-numbers 6) true))
+    (is (= (core/perfect-numbers 7) false))
+    (is (= (core/perfect-numbers 496) true))
+    (is (= (core/perfect-numbers 500) false))
+    (is (= (core/perfect-numbers 8128) true))))
+
+(deftest set-intersection-test
+  (testing "core/set-intersection"
+    (is (= (core/set-intersection #{0 1 2 3} #{2 3 4 5}) #{2 3}))
+    (is (= (core/set-intersection #{0 1 2} #{3 4 5}) #{}))
+    (is (= (core/set-intersection #{:a :b :c :d} #{:c :e :a :f :d}) #{:a :c :d}))))
+
+(deftest half-truth-test
+  (testing "core/half-truth"
+    (is (= false (core/half-truth false false)))
+    (is (= true (core/half-truth true false)))
+    (is (= false (core/half-truth true)))
+    (is (= true (core/half-truth false true false)))
+    (is (= false (core/half-truth true true true)))
+    (is (= true (core/half-truth true true true false)))))
