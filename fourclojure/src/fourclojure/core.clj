@@ -1,4 +1,5 @@
-(ns fourclojure.core)
+(ns fourclojure.core
+  (:require [clojure.string :as str]))
 
 (defn last-element
   "Return the last element in a sequence without using last."
@@ -390,3 +391,39 @@
   [x y]
   (letfn [(divisors [n] (filter #(zero? (rem n %)) (range 1 (inc n))))]
     (apply max (filter (set (divisors y)) (divisors x)))))
+
+(defn prime-numbers
+  "Returns the first x number of prime numbers"
+  [x]
+  (letfn [(divisors [n] (filter #(zero? (rem n %)) (range 1 n)))]
+    (take x (filter #(= 1 (count (divisors %))) (range)))))
+
+(defn my-merge-with
+  "Reimplements merge-with"
+  [f & maps]
+  (reduce
+   (fn [res nm]
+     (reduce #(if (get %1 (first %2))
+                (assoc %1 (first %2) (f (get %1 (first %2)) (second %2)))
+                (assoc %1 (first %2) (second %2)))
+             res
+             (seq nm)))
+   maps))
+
+(defn word-sorting
+  "Splits a sentence up into a sorted list of words"
+  [sentence]
+  (sort-by str/lower-case (str/split (str/replace sentence #"[^\w\s]" "") #"\s")))
+
+(defn analyze-ttt
+  "determines winner of a tic-tac-toe board"
+  [board]
+  (letfn [(cols [b] (map #(take-nth 3 (drop % (flatten b))) (range 0 3)))
+          (rows [b] (map #(take 3 (drop (* 3 %) (flatten b))) (range 0 3)))
+          (udiag [b] (list (take 3 (drop 1 (take-nth 2 (flatten b))))))
+          (ddiag [b] (list (take-nth 4 (flatten b))))]
+    (let [wins (filter
+                #(and (not= (first %) :e)
+                      (apply = %))
+                (mapcat #(% board) [cols rows udiag ddiag]))]
+      (when wins (first (first wins))))))

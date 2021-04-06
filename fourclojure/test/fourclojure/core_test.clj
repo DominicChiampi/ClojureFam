@@ -245,3 +245,51 @@
     (is (= (core/gcd 10 5) 5))
     (is (= (core/gcd 5 7) 1))
     (is (= (core/gcd 1023 858) 33))))
+
+(deftest prime-numbers-test
+  (testing "core/prime-numbers"
+    (is (= (core/prime-numbers 2) [2 3]))
+    (is (= (core/prime-numbers 5) [2 3 5 7 11]))
+    (is (= (last (core/prime-numbers 100)) 541))))
+
+(deftest my-merge-with-test
+  (testing "core/my-merge-with"
+    (is (= (core/my-merge-with * {:a 2, :b 3, :c 4} {:a 2} {:b 2} {:c 5})
+           {:a 4, :b 6, :c 20}))
+    (is (= (core/my-merge-with - {1 10, 2 20} {1 3, 2 10, 3 15})
+           {1 7, 2 10, 3 15}))
+    (is (= (core/my-merge-with concat {:a [3], :b [6]} {:a [4 5], :c [8 9]} {:b [7]})
+           {:a [3 4 5], :b [6 7], :c [8 9]}))))
+
+(deftest word-sorting-test
+  (testing "core/word-sorting"
+    (is (= (core/word-sorting "Have a nice day.")
+           ["a" "day" "Have" "nice"]))
+    (is (= (core/word-sorting "Clojure is a fun language!")
+           ["a" "Clojure" "fun" "is" "language"]))
+    (is (= (core/word-sorting "Fools fall for foolish follies.")
+           ["fall" "follies" "foolish" "Fools" "for"]))))
+
+(deftest analyze-ttt-test
+  (testing "core/analyze-ttt"
+    (is (= nil (core/analyze-ttt [[:e :e :e]
+                                  [:e :e :e]
+                                  [:e :e :e]])))
+    (is (= :x (core/analyze-ttt [[:x :e :o]
+                                 [:x :e :e]
+                                 [:x :e :o]])))
+    (is (= :o (core/analyze-ttt [[:e :x :e]
+                                 [:o :o :o]
+                                 [:x :e :x]])))
+    (is (= nil (core/analyze-ttt [[:x :e :o]
+                                  [:x :x :e]
+                                  [:o :x :o]])))
+    (is (= :x (core/analyze-ttt [[:x :e :e]
+                                 [:o :x :e]
+                                 [:o :e :x]])))
+    (is (= :o (core/analyze-ttt [[:x :e :o]
+                                 [:x :o :e]
+                                 [:o :e :x]])))
+    (is (= nil (core/analyze-ttt [[:x :o :x]
+                                  [:x :o :x]
+                                  [:o :x :o]])))))
