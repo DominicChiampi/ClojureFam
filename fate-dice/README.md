@@ -1,15 +1,2 @@
-
-### Development mode
-```
-npm install
-npx shadow-cljs watch app
-```
-start a ClojureScript REPL
-```
-npx shadow-cljs browser-repl
-```
-### Building for production
-
-```
-npx shadow-cljs release app
-```
+## fate-dice
+Simple dice rolling experiment to learn clojurescript hiccup and js interop
